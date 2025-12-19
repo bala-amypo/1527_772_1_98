@@ -16,7 +16,7 @@ public class RecommendationController {
 
     @PostMapping("/{userId}")
     public Recommendation generate(@PathVariable Long userId) {
-        return recommendationService.save(userId);
+        return recommendationService.generate(userId);
     }
 
     @GetMapping("/latest/{userId}")
@@ -24,7 +24,7 @@ public class RecommendationController {
         return recommendationService.getLatest(userId);
     }
 
-    @GetMapping("/{userId}/all")
+    @GetMapping("/{userId}")
     public List<Recommendation> getAll(@PathVariable Long userId) {
         return recommendationService.getAll(userId);
     }
