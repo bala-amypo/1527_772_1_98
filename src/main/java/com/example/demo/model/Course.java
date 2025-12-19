@@ -20,13 +20,9 @@ public class Course {
     private User instructor;
 
     private LocalDateTime createdAt;
-
-    // Default constructor
     public Course() {
         this.createdAt = LocalDateTime.now();
     }
-
-    // Parameterized constructor
     public Course(String title, String description, String category, User instructor) {
         this.title = title;
         this.description = description;
@@ -34,8 +30,6 @@ public class Course {
         this.instructor = instructor;
         this.createdAt = LocalDateTime.now();
     }
-
-    // Getters and Setters
     public Long getId() {
         return id;
     }
