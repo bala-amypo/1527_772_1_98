@@ -14,13 +14,16 @@ public class RecommendationServiceImpl implements RecommendationService {
     private RecommendationRepository recommendationRepository;
 
     @Override
-    public Recommendation save(Long lessonId, Recommendation recommendation) {
+    public Recommendation save(Long userId) {
+        Recommendation recommendation = new Recommendation();
+        recommendation.setUserId(userId);
         return recommendationRepository.save(recommendation);
     }
 
     @Override
-    public Recommendation getByUserAndLesson(Long userId, Long lessonId) {
-        return recommendationRepository.findByUserIdAndLessonId(userId, lessonId);
+    public Recommendation getLatest(Long userId) {
+        return recommendationRepository
+                .findTopByUserIdOrderByCreatedAtDesc(userId);
     }
 
     @Override

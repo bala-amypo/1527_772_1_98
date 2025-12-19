@@ -5,9 +5,9 @@ import java.util.List;
 
 public interface RecommendationService {
 
-    Recommendation save(Long lessonId, Recommendation recommendation);
+    Recommendation save(Long userId);
 
-    Recommendation getByUserAndLesson(Long userId, Long lessonId);
+    Recommendation getLatest(Long userId);
 
-    List<Recommendation> getAll(Long userId);   // THIS MUST BE IMPLEMENTED
+    List<Recommendation> getAll(Long userId);
 }
