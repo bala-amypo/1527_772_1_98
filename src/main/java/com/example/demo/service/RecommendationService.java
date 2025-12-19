@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface RecommendationService {
 
-    Recommendation save(Long userId);
+    Recommendation generate(Long userId);
 
     Recommendation getLatest(Long userId);
 
