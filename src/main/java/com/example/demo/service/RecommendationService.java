@@ -4,7 +4,10 @@ import com.example.demo.model.Recommendation;
 import java.util.List;
 
 public interface RecommendationService {
-    Recommendation generate(Long userId);
-    Recommendation getLatest(Long userId);
-    List<Recommendation> getAll(Long userId);
+
+    Recommendation save(Long lessonId, Recommendation recommendation);
+
+    Recommendation getByUserAndLesson(Long userId, Long lessonId);
+
+    List<Recommendation> getAll(Long userId);   // THIS MUST BE IMPLEMENTED
 }
