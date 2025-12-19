@@ -1,0 +1,49 @@
+package com.example.demo.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import com.example.demo.model.MicroLesson;
+import com.example.demo.service.LessonService;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/lessons")
+@Tag(name = "Lessons")
+public class LessonController {
+
+    @Autowired
+    private LessonService lessonService;
+
+    @Operation(summary = "Add lesson to course")
+    @PostMapping("/course/{courseId}")
+    public MicroLesson addLesson(@PathVariable Long courseId,
+                                 @RequestBody MicroLesson lesson) {
+        return lessonService.addLesson(courseId, lesson);
+    }
+
+    @Operation(summary = "Update lesson")
+    @PutMapping("/{lessonId}")
+    public MicroLesson updateLesson(@PathVariable Long lessonId,
+                                    @RequestBody MicroLesson lesson) {
+        lesson.setId(lessonId);
+        return lessonService.updateLesson(lesson);
+    }
+
+    @Operation(summary = "Search lessons")
+    @GetMapping("/search")
+    public List<MicroLesson> searchLessons(@RequestParam(required = false) String tag,
+                                           @RequestParam(required = false) String difficulty) {
+        return lessonService.searchLessons(tag, difficulty);
+    }
+
+    @Operation(summary = "Get lesson details")
+    @GetMapping("/{lessonId}")
+    public MicroLesson getLesson(@PathVariable Long lessonId) {
+        return lessonService.getLessonById(lessonId);
+    }
+}
