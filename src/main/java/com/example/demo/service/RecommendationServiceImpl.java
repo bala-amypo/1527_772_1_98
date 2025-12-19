@@ -1,31 +1,28 @@
 package com.example.demo.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.example.demo.model.Recommendation;
 import com.example.demo.repository.RecommendationRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class RecommendationServiceImpl implements RecommendationService {
 
-    @Autowired
-    private RecommendationRepository recommendationRepository;
+    private final RecommendationRepository recommendationRepository;
 
-    @Override
-    public Recommendation generate(Long userId) {
-        Recommendation rec = new Recommendation();
-        return recommendationRepository.save(rec);
+    public RecommendationServiceImpl(RecommendationRepository recommendationRepository) {
+        this.recommendationRepository = recommendationRepository;
     }
 
     @Override
-    public Recommendation getLatest(Long userId) {
-        return recommendationRepository.findByUserIdOrderByGeneratedAtDesc(userId);
+    public List<Recommendation> getRecommendationsByUser(Long userId) {
+        return recommendationRepository
+                .findByUserIdOrderByCreatedAtDesc(userId);
     }
 
     @Override
-    public List<Recommendation> getAll(Long userId) {
-        return recommendationRepository.findAll();
+    public Recommendation saveRecommendation(Recommendation recommendation) {
+        return recommendationRepository.save(recommendation);
     }
 }
