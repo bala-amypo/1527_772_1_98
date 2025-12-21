@@ -13,7 +13,7 @@ public class AuthController {
 
     private final UserRepository userRepository;
 
-    public UserController(UserRepository userRepository) {
+    public AuthController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -21,9 +21,7 @@ public class AuthController {
     public ResponseEntity<User> register(@Valid @RequestBody User user) {
 
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
         User savedUser = userRepository.save(user);
