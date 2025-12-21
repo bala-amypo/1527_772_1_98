@@ -1,23 +1,32 @@
 package com.example.demo.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.example.demo.model.User;
-import com.example.demo.service.UserService;
+import com.example.demo.repository.UserRepository;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
 public class AuthController {
-    @Autowired
-    private UserService userService;
-    @PostMapping("/register")
-    public User register(@RequestBody User user){
-        return userService.registerUser(user);
+
+    private final UserRepository userRepository;
+
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    
+    @PostMapping("/register")
+    public ResponseEntity<User> register(@Valid @RequestBody User user) {
+
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(null);
+        }
+
+        User savedUser = userRepository.save(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+    }
 }
