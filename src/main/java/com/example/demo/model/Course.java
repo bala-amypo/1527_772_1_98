@@ -1,76 +1,38 @@
-package com.example.demo.model;
+package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
+
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "courses")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     private String title;
+
     private String description;
-    private String category;
 
     @ManyToOne
-    @JoinColumn(name = "instructor_id")
     private User instructor;
 
+    @NotBlank
+    private String category;
+
     private LocalDateTime createdAt;
-    public Course() {
-        this.createdAt = LocalDateTime.now();
-    }
-    public Course(String title, String description, String category, User instructor) {
-        this.title = title;
-        this.description = description;
-        this.category = category;
-        this.instructor = instructor;
-        this.createdAt = LocalDateTime.now();
-    }
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public User getInstructor() {
-        return instructor;
-    }
-
-    public void setInstructor(User instructor) {
-        this.instructor = instructor;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    @PrePersist
+    void onCreate() {
+        createdAt = LocalDateTime.now();
     }
 }

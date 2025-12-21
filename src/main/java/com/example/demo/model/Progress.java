@@ -1,9 +1,18 @@
-package com.example.demo.model;
+package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import lombok.*;
+
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Progress {
 
     @Id
@@ -16,78 +25,19 @@ public class Progress {
     @ManyToOne
     private MicroLesson microLesson;
 
+    @Enumerated(EnumType.STRING)
+    private ProgressStatus status;
+
+    @Min(0)
+    @Max(100)
     private Integer progressPercent;
-    private String status;
+
     private LocalDateTime lastAccessedAt;
+
     private Double score;
 
-    public Progress() {
-        this.lastAccessedAt = LocalDateTime.now();
-    }
-
-    public Progress(User user, MicroLesson microLesson, Integer progressPercent,
-                    String status, Double score) {
-        this.user = user;
-        this.microLesson = microLesson;
-        this.progressPercent = progressPercent;
-        this.status = status;
-        this.score = score;
-        this.lastAccessedAt = LocalDateTime.now();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public MicroLesson getMicroLesson() {
-        return microLesson;
-    }
-
-    public void setMicroLesson(MicroLesson microLesson) {
-        this.microLesson = microLesson;
-    }
-
-    public Integer getProgressPercent() {
-        return progressPercent;
-    }
-
-    public void setProgressPercent(Integer progressPercent) {
-        this.progressPercent = progressPercent;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public LocalDateTime getLastAccessedAt() {
-        return lastAccessedAt;
-    }
-
-    public void setLastAccessedAt(LocalDateTime lastAccessedAt) {
-        this.lastAccessedAt = lastAccessedAt;
-    }
-
-    public Double getScore() {
-        return score;
-    }
-
-    public void setScore(Double score) {
-        this.score = score;
+    @PrePersist
+    void onAccess() {
+        lastAccessedAt = LocalDateTime.now();
     }
 }
