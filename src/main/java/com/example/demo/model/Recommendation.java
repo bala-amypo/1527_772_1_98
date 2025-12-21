@@ -1,33 +1,38 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Entity
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
+@Builder
 public class Recommendation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String message;
-
-    @ManyToOne
+    @ManyToOne(optional = false)
     private User user;
 
-    @ManyToOne
-    private Course course;
+    private LocalDateTime generatedAt;
 
-    public Recommendation() {}
+    @Lob
+    private String recommendedLessonIds;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    private String basisSnapshot;
 
-    public String getMessage() { return message; }
-    public void setMessage(String message) { this.message = message; }
+    @DecimalMin("0.0")
+    @DecimalMax("1.0")
+    private Double confidenceScore;
 
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
-
-    public Course getCourse() { return course; }
-    public void setCourse(Course course) { this.course = course; }
+    @PrePersist
+    void onCreate() {
+        this.generatedAt = LocalDateTime.now();
+    }
 }
