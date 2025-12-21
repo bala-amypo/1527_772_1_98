@@ -3,7 +3,6 @@ package com.example.demo.service;
 import com.example.demo.model.Recommendation;
 import com.example.demo.model.User;
 import com.example.demo.repository.RecommendationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,15 +10,18 @@ import java.util.List;
 @Service
 public class RecommendationServiceImpl implements RecommendationService {
 
-    @Autowired
-    private RecommendationRepository recommendationRepository;
+    private final RecommendationRepository recommendationRepository;
+
+    public RecommendationServiceImpl(RecommendationRepository recommendationRepository) {
+        this.recommendationRepository = recommendationRepository;
+    }
 
     @Override
     public Recommendation generate(Long userId) {
         Recommendation recommendation = new Recommendation();
 
         User user = new User();
-        user.setId(userId);     // ✔ CORRECT for your entity
+        user.setId(userId);   // correct: reference by ID only
 
         recommendation.setUser(user);
 
@@ -29,7 +31,7 @@ public class RecommendationServiceImpl implements RecommendationService {
     @Override
     public Recommendation getLatest(Long userId) {
         return recommendationRepository
-                .findTopByUser_IdOrderByCreatedAtDesc(userId);
+                .findTopByUser_IdOrderByGeneratedAtDesc(userId);
     }
 
     @Override
