@@ -1,17 +1,14 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
 @Builder
 public class Progress {
 
@@ -19,14 +16,14 @@ public class Progress {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private MicroLesson microLesson;
 
-    @Enumerated(EnumType.STRING)
-    private ProgressStatus status;
+    @NotBlank
+    private String status;
 
     @Min(0)
     @Max(100)
@@ -37,7 +34,7 @@ public class Progress {
     private Double score;
 
     @PrePersist
-    void onAccess() {
-        lastAccessedAt = LocalDateTime.now();
+    void onPersist() {
+        this.lastAccessedAt = LocalDateTime.now();
     }
 }

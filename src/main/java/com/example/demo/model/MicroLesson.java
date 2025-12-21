@@ -1,18 +1,14 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDate;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
 @Builder
 public class MicroLesson {
 
@@ -20,7 +16,7 @@ public class MicroLesson {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Course course;
 
     @NotBlank
@@ -30,11 +26,11 @@ public class MicroLesson {
     @Max(15)
     private Integer durationMinutes;
 
-    @Enumerated(EnumType.STRING)
-    private ContentType contentType;
+    @NotBlank
+    private String contentType;
 
-    @Enumerated(EnumType.STRING)
-    private Difficulty difficulty;
+    @NotBlank
+    private String difficulty;
 
     private String tags;
 

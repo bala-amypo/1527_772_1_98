@@ -7,10 +7,8 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
 @Builder
 public class Course {
 
@@ -23,16 +21,15 @@ public class Course {
 
     private String description;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private User instructor;
 
-    @NotBlank
     private String category;
 
     private LocalDateTime createdAt;
 
     @PrePersist
     void onCreate() {
-        createdAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 }

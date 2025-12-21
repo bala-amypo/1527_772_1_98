@@ -8,11 +8,10 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
 @Builder
+@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User {
 
     @Id
@@ -24,14 +23,12 @@ public class User {
 
     @Email
     @NotBlank
-    @Column(unique = true)
     private String email;
 
     @NotBlank
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private Role role = Role.LEARNER;
+    private String role;
 
     private String preferredLearningStyle;
 
@@ -39,6 +36,9 @@ public class User {
 
     @PrePersist
     void onCreate() {
-        createdAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
+        if (this.role == null) {
+            this.role = "LEARNER";
+        }
     }
 }
