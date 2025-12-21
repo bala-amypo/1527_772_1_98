@@ -1,10 +1,18 @@
-package com.example.demo.model;
+package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import lombok.*;
+
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "recommendation")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Recommendation {
 
     @Id
@@ -12,66 +20,20 @@ public class Recommendation {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "micro_lesson_id")
-    private MicroLesson microLesson;
+    private LocalDateTime generatedAt;
 
-    private String reason;
+    private String recommendedLessonIds;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private String basisSnapshot;
 
-    public Recommendation() {
-        this.createdAt = LocalDateTime.now();
-    }
+    @DecimalMin("0.0")
+    @DecimalMax("1.0")
+    private Double confidenceScore;
 
-    public Recommendation(User user, MicroLesson microLesson, String reason) {
-        this.user = user;
-        this.microLesson = microLesson;
-        this.reason = reason;
-        this.createdAt = LocalDateTime.now();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public MicroLesson getMicroLesson() {
-        return microLesson;
-    }
-
-    public void setMicroLesson(MicroLesson microLesson) {
-        this.microLesson = microLesson;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    @PrePersist
+    void onCreate() {
+        generatedAt = LocalDateTime.now();
     }
 }
