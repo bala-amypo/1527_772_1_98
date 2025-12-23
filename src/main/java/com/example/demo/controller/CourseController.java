@@ -30,14 +30,11 @@ public class CourseController {
         course.setId(courseId);
         return courseService.saveCourse(course);
     }
-
-    @Operation(summary = "List instructor courses")
     @GetMapping("/instructor/{instructorId}")
     public List<Course> getInstructorCourses(@PathVariable Long instructorId) {
         return courseService.getCoursesByInstructor(instructorId);
     }
 
-    @Operation(summary = "Get course details")
     @GetMapping("/{courseId}")
     public Course getCourse(@PathVariable Long courseId) {
         return courseService.getCourseById(courseId);
