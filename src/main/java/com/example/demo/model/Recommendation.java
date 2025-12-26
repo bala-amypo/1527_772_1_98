@@ -2,25 +2,30 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "recommendations")
-@Getter
-@Setter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Recommendation {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @ManyToOne
     private User user;
+
     private LocalDateTime generatedAt;
-    private String recommendedLessonIds;
+
+    private String recommendedLessonIds; // CSV
+
     private String basisSnapshot;
+
     private BigDecimal confidenceScore;
 
     @PrePersist
