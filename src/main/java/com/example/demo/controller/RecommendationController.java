@@ -1,35 +1,38 @@
 package com.example.demo.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
+import com.example.demo.dto.RecommendationRequest;
 import com.example.demo.model.Recommendation;
 import com.example.demo.service.RecommendationService;
-
-import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/recommendations")
-@Tag(name = "Recommendations")
 public class RecommendationController {
 
-    @Autowired
-    private RecommendationService recommendationService;
+    private final RecommendationService recommendationService;
 
+    public RecommendationController(RecommendationService recommendationService) {
+        this.recommendationService = recommendationService;
+    }
+
+    // existing
     @PostMapping("/{userId}")
-    public Recommendation generate(@PathVariable Long userId) {
-        return recommendationService.generate(userId);
+    public Recommendation generate(@PathVariable Long userId,
+                                   @RequestBody RecommendationRequest request) {
+        return recommendationService.generateRecommendation(userId, request);
     }
 
+    // existing
     @GetMapping("/latest/{userId}")
-    public Recommendation getLatest(@PathVariable Long userId) {
-        return recommendationService.getLatest(userId);
+    public Recommendation latest(@PathVariable Long userId) {
+        return recommendationService.getLatestRecommendation(userId);
     }
 
-    @GetMapping("/{userId}")
-    public List<Recommendation> getAll(@PathVariable Long userId) {
-        return recommendationService.getAll(userId);
+    // STEP-5 REQUIRED (added)
+    @GetMapping("/user/{userId}")
+    public List<Recommendation> getUserRecommendations(@PathVariable Long userId) {
+        return recommendationService.getRecommendations(userId, null, null);
     }
 }
