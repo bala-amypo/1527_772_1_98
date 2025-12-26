@@ -1,27 +1,19 @@
-package com.example.demo.model;
-
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import lombok.*;
-
-import java.time.LocalDateTime;
-
 @Entity
 @Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
     private String title;
 
     private String description;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     private User instructor;
 
     private String category;
@@ -30,6 +22,6 @@ public class Course {
 
     @PrePersist
     void onCreate() {
-        this.createdAt = LocalDateTime.now();
+        createdAt = LocalDateTime.now();
     }
 }
