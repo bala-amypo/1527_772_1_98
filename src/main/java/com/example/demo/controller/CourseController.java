@@ -20,10 +20,9 @@ public class CourseController {
     private CourseService courseService;
 
     @Operation(summary = "Create course")
-    @PostMapping("/instructor/{instructorId}")
-    public Course createCourse(@PathVariable Long instructorId,
-                               @RequestBody Course course) {
-        return courseService.saveCourse(course, instructorId);
+    @PostMapping
+    public Course createCourse(@RequestBody Course course) {
+        return courseService.saveCourse(course);
     }
 
     @PutMapping("/{courseId}")

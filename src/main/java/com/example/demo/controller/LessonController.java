@@ -33,9 +33,8 @@ public class LessonController {
 
     @GetMapping("/search")
     public List<MicroLesson> searchLessons(@RequestParam(required = false) String tag,
-                                           @RequestParam(required = false) String difficulty,
-                                           @RequestParam(required = false) String contentType) {
-        return lessonService.searchLessons(tag, difficulty, contentType);
+                                           @RequestParam(required = false) String difficulty) {
+        return lessonService.searchLessons(tag, difficulty);
     }
 
     @GetMapping("/{lessonId}")
