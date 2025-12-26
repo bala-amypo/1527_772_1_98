@@ -1,10 +1,15 @@
 package com.example.demo.service;
 
 import com.example.demo.model.User;
+import com.example.demo.security.AuthResponse;
 
 public interface UserService {
 
-    User registerUser(User user);
+    User register(User user);
 
-    User getUserByEmail(String email);
+    AuthResponse login(String email, String password);
+
+    User findById(Long id);
+
+    User findByEmail(String email);
 }
