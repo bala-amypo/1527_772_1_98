@@ -1,48 +1,35 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.Course;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.example.demo.model.MicroLesson;
-import com.example.demo.repository.CourseRepository;
 import com.example.demo.repository.MicroLessonRepository;
 import com.example.demo.service.LessonService;
-import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
 public class LessonServiceImpl implements LessonService {
 
-    private final MicroLessonRepository lessonRepository;
-    private final CourseRepository courseRepository;
-
-    public LessonServiceImpl(MicroLessonRepository lessonRepository,
-                             CourseRepository courseRepository) {
-        this.lessonRepository = lessonRepository;
-        this.courseRepository = courseRepository;
-    }
+    @Autowired
+    private MicroLessonRepository lessonRepository;
 
     @Override
-    public MicroLesson saveLesson(Long courseId, MicroLesson lesson) {
-        Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new RuntimeException("Course not found"));
-        lesson.setCourse(course);
+    public MicroLesson addLesson(Long courseId, MicroLesson lesson) {
+        lesson.setCourseId(courseId);
         return lessonRepository.save(lesson);
     }
 
     @Override
     public MicroLesson updateLesson(Long lessonId, MicroLesson lesson) {
-        MicroLesson existing = lessonRepository.findById(lessonId)
-                .orElseThrow(() -> new RuntimeException("Lesson not found"));
-        existing.setTitle(lesson.getTitle());
-        existing.setDurationMinutes(lesson.getDurationMinutes());
-        existing.setContentType(lesson.getContentType());
-        existing.setDifficulty(lesson.getDifficulty());
-        existing.setTags(lesson.getTags());
-        return lessonRepository.save(existing);
+        lesson.setId(lessonId);
+        return lessonRepository.save(lesson);
     }
 
     @Override
-    public List<MicroLesson> searchLessons(String tags, String difficulty, String contentType) {
-        return lessonRepository.findByTagsAndDifficultyAndContentType(tags, difficulty, contentType);
+    public List<MicroLesson> searchLessons(String tag, String difficulty, String contentType) {
+        return lessonRepository.findByFilters(tag, difficulty, contentType);
     }
 
     @Override
