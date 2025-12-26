@@ -2,7 +2,6 @@ package com.example.demo.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.example.demo.model.MicroLesson;
 import com.example.demo.repository.MicroLessonRepository;
 import com.example.demo.service.LessonService;
@@ -23,18 +22,27 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public MicroLesson updateLesson(Long lessonId, MicroLesson lesson) {
-        lesson.setId(lessonId);
-        return lessonRepository.save(lesson);
-    }
-
-    @Override
-    public List<MicroLesson> searchLessons(String tag, String difficulty, String contentType) {
-        return lessonRepository.findByFilters(tag, difficulty, contentType);
+        MicroLesson existing = lessonRepository.findById(lessonId)
+                .orElseThrow(() -> new RuntimeException("Lesson not found"));
+        existing.setTitle(lesson.getTitle());
+        existing.setContent(lesson.getContent());
+        existing.setTag(lesson.getTag());
+        existing.setDifficulty(lesson.getDifficulty());
+        return lessonRepository.save(existing);
     }
 
     @Override
     public MicroLesson getLessonById(Long lessonId) {
         return lessonRepository.findById(lessonId)
                 .orElseThrow(() -> new RuntimeException("Lesson not found"));
+    }
+
+    @Override
+    public List<MicroLesson> searchLessons(String tag, String difficulty) {
+        // Simple filter by tag/difficulty
+        return lessonRepository.findAll().stream()
+                .filter(l -> (tag == null || tag.equals(l.getTag())) &&
+                             (difficulty == null || difficulty.equals(l.getDifficulty())))
+                .toList();
     }
 }
