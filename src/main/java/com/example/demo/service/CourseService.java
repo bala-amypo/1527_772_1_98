@@ -5,11 +5,11 @@ import java.util.List;
 
 public interface CourseService {
 
-    Course createCourse(Course course, Long instructorId);
+    Course saveCourse(Course course, Long instructorId); // was createCourse
 
     Course updateCourse(Long courseId, Course course);
 
-    List<Course> listCoursesByInstructor(Long instructorId);
+    List<Course> getCoursesByInstructor(Long instructorId); // was listCoursesByInstructor
 
-    Course getCourse(Long courseId);
+    Course getCourseById(Long courseId); // was getCourse
 }

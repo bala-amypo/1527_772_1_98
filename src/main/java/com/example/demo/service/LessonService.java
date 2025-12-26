@@ -5,11 +5,11 @@ import java.util.List;
 
 public interface LessonService {
 
-    MicroLesson addLesson(Long courseId, MicroLesson lesson);
+    MicroLesson saveLesson(Long courseId, MicroLesson lesson);
 
-    MicroLesson updateLesson(Long lessonId, MicroLesson lesson);
+    MicroLesson updateLesson(Long lessonId, MicroLesson lesson); // corrected signature
 
-    List<MicroLesson> findLessonsByFilters(String tags, String difficulty, String contentType);
+    List<MicroLesson> searchLessons(String tags, String difficulty, String contentType); // corrected signature
 
-    MicroLesson getLesson(Long lessonId);
+    MicroLesson getLessonById(Long lessonId);
 }

@@ -21,7 +21,7 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public MicroLesson addLesson(Long courseId, MicroLesson lesson) {
+    public MicroLesson saveLesson(Long courseId, MicroLesson lesson) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
         lesson.setCourse(course);
@@ -41,12 +41,12 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public List<MicroLesson> findLessonsByFilters(String tags, String difficulty, String contentType) {
-        return lessonRepository.findByFilters(tags, difficulty, contentType);
+    public List<MicroLesson> searchLessons(String tags, String difficulty, String contentType) {
+        return lessonRepository.findByTagsAndDifficultyAndContentType(tags, difficulty, contentType);
     }
 
     @Override
-    public MicroLesson getLesson(Long lessonId) {
+    public MicroLesson getLessonById(Long lessonId) {
         return lessonRepository.findById(lessonId)
                 .orElseThrow(() -> new RuntimeException("Lesson not found"));
     }

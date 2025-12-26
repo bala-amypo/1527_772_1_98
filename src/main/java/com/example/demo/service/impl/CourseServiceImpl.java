@@ -20,12 +20,9 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course createCourse(Course course, Long instructorId) {
+    public Course saveCourse(Course course, Long instructorId) {
         User instructor = userRepository.findById(instructorId)
                 .orElseThrow(() -> new RuntimeException("Instructor not found"));
-        if (!instructor.getRole().equals("INSTRUCTOR") && !instructor.getRole().equals("ADMIN")) {
-            throw new RuntimeException("User is not an instructor");
-        }
         course.setInstructor(instructor);
         return courseRepository.save(course);
     }
@@ -41,14 +38,12 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Course> listCoursesByInstructor(Long instructorId) {
-        return courseRepository.findAll().stream()
-                .filter(c -> c.getInstructor().getId().equals(instructorId))
-                .toList();
+    public List<Course> getCoursesByInstructor(Long instructorId) {
+        return courseRepository.findByInstructorId(instructorId);
     }
 
     @Override
-    public Course getCourse(Long courseId) {
+    public Course getCourseById(Long courseId) {
         return courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
     }
