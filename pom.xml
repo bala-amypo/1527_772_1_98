@@ -14,7 +14,7 @@
 
     <groupId>com.example</groupId>
     <artifactId>demo</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1-SN>3.3.4</version>        <artifactId>spring-boot-starter-parent</artifactId>        <groupId>org.springframework.boot</groupId><?xml version="1.0" encoding="UTF-8"?><pAPSHOT</version>
     <name>demo</name>
     <description>Demo project for Spring Boot</description>
 
