@@ -5,7 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AuthRequest {
-    private String email;
-    private String password;
+public class RecommendationRequest {
+    private String preference;
 }
