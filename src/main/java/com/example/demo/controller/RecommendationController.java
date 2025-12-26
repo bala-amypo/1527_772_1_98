@@ -7,7 +7,6 @@ import com.example.demo.model.Recommendation;
 import com.example.demo.service.RecommendationService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.Operation;
 
 import java.util.List;
 
@@ -19,18 +18,18 @@ public class RecommendationController {
     @Autowired
     private RecommendationService recommendationService;
 
-    @PostMapping("/user/{userId}/generate")
-    public Recommendation generateRecommendation(@PathVariable Long userId) {
+    @PostMapping("/{userId}")
+    public Recommendation generate(@PathVariable Long userId) {
         return recommendationService.generate(userId);
     }
 
-    @GetMapping("/user/{userId}/latest")
-    public Recommendation getLatestRecommendation(@PathVariable Long userId) {
+    @GetMapping("/latest/{userId}")
+    public Recommendation getLatest(@PathVariable Long userId) {
         return recommendationService.getLatest(userId);
     }
 
-    @GetMapping("/user/{userId}/all")
-    public List<Recommendation> getAllRecommendations(@PathVariable Long userId) {
+    @GetMapping("/{userId}")
+    public List<Recommendation> getAll(@PathVariable Long userId) {
         return recommendationService.getAll(userId);
     }
 }
