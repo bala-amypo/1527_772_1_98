@@ -1,9 +1,12 @@
 package com.example.demo.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.demo.model.Progress;
-import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import java.util.List;
 
+@Repository
 public interface ProgressRepository extends JpaRepository<Progress, Long> {
-    Optional<Progress> findByUserIdAndLessonId(Long userId, Long lessonId);
+    Progress findByUserIdAndMicroLessonId(Long userId, Long lessonId);
+    List<Progress> findByUserIdOrderByLastAccessedAtDesc(Long userId);
 }
