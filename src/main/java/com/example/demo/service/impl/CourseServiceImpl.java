@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import com.example.demo.model.Course;
 import com.example.demo.repository.CourseRepository;
 import com.example.demo.service.CourseService;
-
 import java.util.List;
 
 @Service
@@ -21,12 +20,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Course updateCourse(Long courseId, Course course) {
-        Course existing = courseRepository.findById(courseId)
-                .orElseThrow(() -> new RuntimeException("Course not found"));
-        existing.setTitle(course.getTitle());
-        existing.setDescription(course.getDescription());
-        existing.setInstructorId(course.getInstructorId());
-        return courseRepository.save(existing);
+        course.setId(courseId);
+        return courseRepository.save(course);
     }
 
     @Override
@@ -36,7 +31,6 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Course getCourseById(Long courseId) {
-        return courseRepository.findById(courseId)
-                .orElseThrow(() -> new RuntimeException("Course not found"));
+        return courseRepository.findById(courseId).orElse(null);
     }
 }

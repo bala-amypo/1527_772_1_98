@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import com.example.demo.model.MicroLesson;
 import com.example.demo.repository.MicroLessonRepository;
 import com.example.demo.service.LessonService;
-
 import java.util.List;
 
 @Service
@@ -22,27 +21,17 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public MicroLesson updateLesson(Long lessonId, MicroLesson lesson) {
-        MicroLesson existing = lessonRepository.findById(lessonId)
-                .orElseThrow(() -> new RuntimeException("Lesson not found"));
-        existing.setTitle(lesson.getTitle());
-        existing.setContent(lesson.getContent());
-        existing.setTag(lesson.getTag());
-        existing.setDifficulty(lesson.getDifficulty());
-        return lessonRepository.save(existing);
-    }
-
-    @Override
-    public MicroLesson getLessonById(Long lessonId) {
-        return lessonRepository.findById(lessonId)
-                .orElseThrow(() -> new RuntimeException("Lesson not found"));
+        lesson.setId(lessonId);
+        return lessonRepository.save(lesson);
     }
 
     @Override
     public List<MicroLesson> searchLessons(String tag, String difficulty) {
-        // Simple filter by tag/difficulty
-        return lessonRepository.findAll().stream()
-                .filter(l -> (tag == null || tag.equals(l.getTag())) &&
-                             (difficulty == null || difficulty.equals(l.getDifficulty())))
-                .toList();
+        return lessonRepository.findByTagAndDifficulty(tag, difficulty);
+    }
+
+    @Override
+    public MicroLesson getLessonById(Long lessonId) {
+        return lessonRepository.findById(lessonId).orElse(null);
     }
 }
