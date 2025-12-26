@@ -4,8 +4,12 @@ import com.example.demo.model.MicroLesson;
 import java.util.List;
 
 public interface LessonService {
+
     MicroLesson addLesson(Long courseId, MicroLesson lesson);
-    MicroLesson updateLesson(MicroLesson lesson);
-    MicroLesson getLessonById(Long lessonId);
-    List<MicroLesson> searchLessons(String tag, String difficulty);
+
+    MicroLesson updateLesson(Long lessonId, MicroLesson lesson);
+
+    List<MicroLesson> findLessonsByFilters(String tags, String difficulty, String contentType);
+
+    MicroLesson getLesson(Long lessonId);
 }
