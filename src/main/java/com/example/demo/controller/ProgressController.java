@@ -9,8 +9,6 @@ import com.example.demo.service.ProgressService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/progress")
 @Tag(name = "Progress")
@@ -19,18 +17,15 @@ public class ProgressController {
     @Autowired
     private ProgressService progressService;
 
-    @PostMapping("/{lessonId}")
-    public Progress recordProgress(@PathVariable Long lessonId,
-                                   @RequestBody Progress progress) {
-        return progressService.saveProgress(lessonId, progress);
+    @PostMapping("/user/{userId}")
+    public Progress saveProgress(@PathVariable Long userId,
+                                 @RequestBody Progress progress) {
+        return progressService.saveProgress(userId, progress);
     }
-    @GetMapping("/lesson/{lessonId}")
-    public Progress getLessonProgress(@PathVariable Long lessonId,
-                                      @RequestParam Long userId) {
+
+    @GetMapping("/user/{userId}/lesson/{lessonId}")
+    public Progress getProgress(@PathVariable Long userId,
+                                @PathVariable Long lessonId) {
         return progressService.getProgress(userId, lessonId);
-    }
-    @GetMapping("/user/{userId}")
-    public List<Progress> getUserProgress(@PathVariable Long userId) {
-        return progressService.getUserProgress(userId);
     }
 }
