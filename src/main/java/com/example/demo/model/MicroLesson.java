@@ -2,20 +2,25 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.time.LocalDate;
 
 @Entity
+@Table(name = "micro_lessons")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class MicroLesson {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @ManyToOne
+    private Course course;
     private String title;
-    private String content;
-    private String tag;
+    private Integer durationMinutes;
+    private String contentType;
     private String difficulty;
-    private Long courseId;
+    private String tags;
+    private LocalDate publishDate;
 }

@@ -1,44 +1,31 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
+@Table(name = "users")
+@Getter
+@Setter
 @Builder
-@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotBlank
     private String fullName;
-
-    @Email
-    @NotBlank
+    @Column(unique = true)
     private String email;
-
-    @NotBlank
     private String password;
-
     private String role;
-
     private String preferredLearningStyle;
-
     private LocalDateTime createdAt;
 
     @PrePersist
-    void onCreate() {
+    public void prePersist() {
         this.createdAt = LocalDateTime.now();
-        if (this.role == null) {
-            this.role = "LEARNER";
-        }
     }
 }
