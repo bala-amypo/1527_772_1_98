@@ -27,19 +27,13 @@ public class RecommendationServiceImpl implements RecommendationService {
     private final MicroLessonRepository microLessonRepository;
     private final ProgressRepository progressRepository;
 
-    public RecommendationServiceImpl(RecommendationRepository recommendationRepository,
-                                     UserRepository userRepository,
-                                     MicroLessonRepository microLessonRepository) {
-        this.recommendationRepository = recommendationRepository;
-        this.userRepository = userRepository;
-        this.microLessonRepository = microLessonRepository;
-        this.progressRepository = null;
-    }
-
-    public RecommendationServiceImpl(RecommendationRepository recommendationRepository,
-                                     UserRepository userRepository,
-                                     MicroLessonRepository microLessonRepository,
-                                     ProgressRepository progressRepository) {
+    // ✅ Single constructor → Spring can autowire safely
+    public RecommendationServiceImpl(
+            RecommendationRepository recommendationRepository,
+            UserRepository userRepository,
+            MicroLessonRepository microLessonRepository,
+            ProgressRepository progressRepository
+    ) {
         this.recommendationRepository = recommendationRepository;
         this.userRepository = userRepository;
         this.microLessonRepository = microLessonRepository;
@@ -48,13 +42,14 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     @Override
     public Recommendation generateRecommendation(Long userId, RecommendationRequest params) {
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         List<Progress> progressList =
                 progressRepository.findByUserIdOrderByLastAccessedAtDesc(userId);
 
-        String tags = params.getTags() == null || params.getTags().isEmpty()
+        String tags = (params.getTags() == null || params.getTags().isEmpty())
                 ? null
                 : String.join(",", params.getTags());
 
@@ -78,32 +73,44 @@ public class RecommendationServiceImpl implements RecommendationService {
                 .map(l -> l.getId().toString())
                 .collect(Collectors.joining(","));
 
-        BigDecimal confidence = calculateConfidenceScore(recommended.size(), progressList.size());
+        BigDecimal confidence = calculateConfidenceScore(
+                recommended.size(),
+                progressList.size()
+        );
 
-        Recommendation rec = Recommendation.builder()
+        Recommendation recommendation = Recommendation.builder()
                 .user(user)
                 .recommendedLessonIds(ids)
                 .confidenceScore(confidence)
                 .build();
 
-        return recommendationRepository.save(rec);
+        return recommendationRepository.save(recommendation);
     }
 
     @Override
     public Recommendation getLatestRecommendation(Long userId) {
+
         List<Recommendation> list =
                 recommendationRepository.findByUserIdOrderByGeneratedAtDesc(userId);
+
         if (list.isEmpty()) {
             throw new ResourceNotFoundException("No recommendations found");
         }
+
         return list.get(0);
     }
 
     @Override
-    public List<Recommendation> getRecommendations(Long userId, LocalDate from, LocalDate to) {
+    public List<Recommendation> getRecommendations(
+            Long userId,
+            LocalDate from,
+            LocalDate to
+    ) {
         LocalDateTime start = from.atStartOfDay();
         LocalDateTime end = to.atTime(23, 59, 59);
-        return recommendationRepository.findByUserIdAndGeneratedAtBetween(userId, start, end);
+
+        return recommendationRepository
+                .findByUserIdAndGeneratedAtBetween(userId, start, end);
     }
 
     private BigDecimal calculateConfidenceScore(int recCount, int progCount) {
